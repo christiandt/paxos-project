@@ -41,22 +41,23 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("10.0.0.14", 5005))
 server.listen(5)
 connections.append(server)
-
+print "Server started"
 
 
 while 1:
+	# Check if there are any readable sockets
 	readable_sockets,writeable_sockets,error_sockets = select.select(connections,[],[])
 	for s in readable_sockets:
+		# If there is a new connection
 		if s == server:
 			connection, address = server.accept()
 			connections.append(connection)
-			print 'Connection address:', address
+			print 'Client connected:', address
 
+		# Else if there is received data
 		else:
 			while 1:
 				data = s.recv(BUFFER_SIZE)
-				if not data: 
-					break
 
 				if data[0:4] == "READ":
 					result = handleRead()
@@ -80,4 +81,7 @@ while 1:
 					server.close()
 					print 'Goodbye'
 					sys.exit(0)
+				else:
+					s.send('INVALID')
 
+				break

@@ -19,4 +19,6 @@ aS'Mos'
 p10
 aS'Good morning'
 p11
+aS'Good night'
+p12
 a.
