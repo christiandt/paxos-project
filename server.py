@@ -11,7 +11,7 @@ def getLog():
 		logFile.close
 		return log
 	except:
-		return []
+		return ["!"]
 
 def saveLog(log):
 	try:
@@ -38,7 +38,7 @@ def handlePost(data):
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(("10.0.0.14", 5005))
+server.bind(("10.0.0.15", 5005))
 server.listen(5)
 connections.append(server)
 print "Server started"
