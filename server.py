@@ -1,6 +1,8 @@
 import cPickle as pickle
 import socket, select, sys
 
+TCP_IP = socket.gethostbyname(socket.gethostname())
+TCP_PORT = 5005
 BUFFER_SIZE = 1024
 connections = []
 
@@ -38,10 +40,11 @@ def handlePost(data):
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(("10.0.0.15", 5005))
+server.bind((TCP_IP, 5005))
 server.listen(5)
 connections.append(server)
 print "Server started"
+print "Address", TCP_IP, ":", TCP_PORT
 
 
 while 1:
