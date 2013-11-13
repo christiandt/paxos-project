@@ -49,7 +49,7 @@ def broadcast(sock, message):
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((TCP_IP, 5005))
+server.bind((TCP_IP, TCP_PORT))
 server.listen(5)
 connections.append(server)
 print "Server started"
