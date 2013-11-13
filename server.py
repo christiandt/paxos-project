@@ -38,6 +38,15 @@ def handlePost(data):
 	else:
 		return "FAIL"
 
+def broadcast(sock, message):
+	for socket in connections:
+		if socket != server and socket != sock:
+			try :
+				socket.send(message)
+			except :
+				socket.close()
+				connections.remove(socket)
+
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((TCP_IP, 5005))
