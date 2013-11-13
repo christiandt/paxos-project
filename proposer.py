@@ -12,6 +12,17 @@ __author__ = 'Kine'
 # BallotNum ← 〈BallotNum.num+1, myId〉
 # send (“prepare”, BallotNum) to all
 
+proposalNum = 2
+
+def prepare(proposalNum):
+    None
+
+
+def receivePromise():
+    None
+
+
+
 
 # Phase Accept - LEADER
 

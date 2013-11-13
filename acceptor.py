@@ -1,17 +1,25 @@
 # coding=utf-8
 __author__ = 'Kine'
 
+proposalID = None
+acceptedProposal = None
+acceptedValue = None
 
-# Phase Prepare - COHORT
 
-# Upon receive (“prepare”, bal) from i
-# if bal ≥ BallotNum then
-# BallotNum ← bal
-# send (“ack”, bal, AcceptNum, AcceptVal) to i
 
-# Phase Accept - COHORT
+def receivePrepare(self, senderID, proposalID):
+    global minProposal
+    if proposalID > minProposal:
+        minProposal = proposalID
+        # Do send/return stuff
+    if proposalID == self.proposalID:
+        # Do send/return stuff      return acceptedProposal, acceptedValue
 
-# Upon receive (“accept”, b, v) if b ≥ BallotNum then
-# AcceptNum ← b; AcceptVal ← v proposal */
-# ￼/* accept send (“accept”, b, v) to all (first time only)
+
+def receiveAcceptRequest(self, senderID, proposalID, value):
+    if proposalID >= self.proposalID:
+        self.proposalID = proposalID
+        self.acceptedProposal = proposalID
+        self.acceptedValue = value
+    return self.proposalID
 
