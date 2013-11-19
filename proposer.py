@@ -1,5 +1,9 @@
 # coding=utf-8
-__author__ = 'Kine'
+
+import proposal, accept
+
+myID = 0;
+proposalID = 0;
 
 # Ballotnum, initially <0,0>
 # AcceptNum, initially, <0,0>
@@ -14,12 +18,19 @@ __author__ = 'Kine'
 
 proposalNum = 2
 
-def prepare(proposalNum):
-    None
+def prepare(post):
+	global proposalID
+	blogpost = post
+	proposalID += 1
+	propose = proposal(myID, proposalID)
+	return propose
 
 
-def receivePromise():
-    None
+def receivePromise(accepted):
+	# receive proposebla bla
+
+
+    return None
 
 
 

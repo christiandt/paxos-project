@@ -1,5 +1,7 @@
 import cPickle as pickle
-import socket, select, sys
+import socket, select, sys, json
+import proposer, acceptor
+import proposal, accept
 
 TCP_IP = socket.gethostbyname(socket.gethostname())
 TCP_PORT = 5005
@@ -38,9 +40,9 @@ def handlePost(data):
 	else:
 		return "FAIL"
 
-def broadcast(sock, message):
+def broadcast(message):
 	for socket in connections:
-		if socket != server and socket != sock:
+		if socket != server:
 			try :
 				socket.send(message)
 			except :
@@ -77,6 +79,8 @@ while 1:
 
 				elif data[0:5] == "POST:":
 					result = handlePost(data[5:])
+					proposemessage = json.dumps(proposer.prepare(result))
+					broadcast("PROPOSE:"+proposemessage)
 					s.send(result)
 
 				elif data[0:3] == "END":
@@ -86,6 +90,26 @@ while 1:
 					print 'Removed'
 					break
 
+				elif data[0:7] == "PROPOSE":
+					result = data[7:]
+					proposed = json.loads(result)
+					sender = proposed.senderID  # Fix, senderID is only an int, and does not map to a socket
+					reply = acceptor.receivePrepare(proposed)
+					reply = json.dumps(reply)
+					if reply == None:
+						semder.send("ACK:")
+					else:
+						sender.send("ACK:"+reply)  # This integer definetly does not have a send-method...
+
+				elif data[0:3] == "ACK":
+					result = data[3:]
+					result = json.loads(result)
+					reply = proposer.receivePromise(result)
+					if reply:
+						# Send accept message
+						None
+
+
 				elif data[0:8] == "SHUTDOWN":
 					print 'Shutting Down'
 					#server.shutdown(2)
@@ -93,6 +117,8 @@ while 1:
 					server.close()
 					print 'Goodbye'
 					sys.exit(0)
+
+
 				else:
 					s.send('INVALID')
 

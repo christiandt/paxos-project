@@ -1,22 +1,47 @@
 # coding=utf-8
-__author__ = 'Kine'
 
-proposalID = None
-acceptedProposal = None
-acceptedValue = None
+import proposal, accept
+
+minProposal
+accepted = accept(None, None, None)
+
+
+#proposalID
+#acceptedProposal
+#acceptedValue
 
 
 
-def receivePrepare(self, senderID, proposalID):
+def receivePrepare(proposed):
     global minProposal
-    if proposalID > minProposal:
+    if proposed.proposalID >= minProposal:
+        minProposal = proposed.proposalID
+    return accepted
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if proposed.proposalID > minProposal:
         minProposal = proposalID
         # Do send/return stuff
-    if proposalID == self.proposalID:
+    if proposed.proposalID == proposalID:
+        None
         # Do send/return stuff      return acceptedProposal, acceptedValue
 
 
-def receiveAcceptRequest(self, senderID, proposalID, value):
+def receiveAcceptRequest(senderID, proposalID, value):
     if proposalID >= self.proposalID:
         self.proposalID = proposalID
         self.acceptedProposal = proposalID

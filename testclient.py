@@ -1,7 +1,7 @@
 import socket
 
 
-TCP_IP = '10.0.0.15'
+TCP_IP = '10.0.0.14'
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 
