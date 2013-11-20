@@ -93,21 +93,20 @@ while 1:
 				elif data[0:7] == "PROPOSE":
 					result = data[7:]
 					proposed = json.loads(result)
-					sender = proposed.senderID  # Fix, senderID is only an int, and does not map to a socket
 					reply = acceptor.receivePrepare(proposed)
 					reply = json.dumps(reply)
 					if reply == None:
-						semder.send("ACK:")
+						s.send("ACK:")
 					else:
-						sender.send("ACK:"+reply)  # This integer definetly does not have a send-method...
+						s.send("ACK:"+reply)
 
 				elif data[0:3] == "ACK":
 					result = data[3:]
 					result = json.loads(result)
 					reply = proposer.receivePromise(result)
+					accepmessage = json.dumps(proposer.prepare(result))
 					if reply:
-						# Send accept message
-						None
+						broadcast("ACCEPT:"+accepmessage)
 
 
 				elif data[0:8] == "SHUTDOWN":
