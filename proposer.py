@@ -1,20 +1,13 @@
 # coding=utf-8
 
-import proposal, accept
+from proposal import *
+from accept import *
 
-myID = 0;
-proposalID = 0;
-
-# Ballotnum, initially <0,0>
-# AcceptNum, initially, <0,0>
-# AcceptVal
-
-
-# Phase Prepare - LEADER
-
-# if leader then
-# BallotNum ← 〈BallotNum.num+1, myId〉
-# send (“prepare”, BallotNum) to all
+myID = 3			# server ID
+myValue = 7
+proposalID = 0	
+acceptedPromise = []
+maj = 3
 
 proposalNum = 2
 
@@ -27,23 +20,24 @@ def prepare(post):
 
 
 def receivePromise(accepted):
-	# receive proposebla bla
+	global myValue
+	global acceptedPromise
+	acceptedPromise.append(accepted)
+	if len(acceptedPromise) >= maj:
+		for promise in acceptedPromise:
+			if promise.proposalID != None and promise.value != None:
+				 myValue = max(value.value for value in acceptedPromise)
+		acceptedPromise = []
+		return accept(myID, proposalID, myValue)
+	return None
 
 
-    return None
+#acc = accept(None, None, None)
+#acc2 = accept(None, 5, 6)
+#acc3 = accept(None, None, None)
+#print receivePromise(acc)
+#print receivePromise(acc2)
+#print receivePromise(acc3).value
 
 
-
-
-# Phase Accept - LEADER
-
-# Upon receive (“ack”, BallotNum, b, val) from majority
-# if all vals = ⊥ then myVal = initial value else myVal = received val with highest b
-# send (“accept”, BallotNum, myVal) to all /* proposal */
-
-# Deciding
-
-# Upon receive (“accept”, b, v) from n-t decide v
-# periodically send (“decide”, v) to all
-# Upon receive (“decide”, v) decide v
 

@@ -1,8 +1,8 @@
 
 class proposal:
 
-	senderID
-	proposalID
+	senderID = 0
+	proposalID = 0
 
 	def __init__(self, senderID, proposalID):
 		senderID = senderID
