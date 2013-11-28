@@ -7,7 +7,8 @@ myID = 3			# server ID
 myValue = 7
 proposalID = 0	
 acceptedPromise = []
-maj = 3
+acceptedAccepted = []
+majority = 3
 
 proposalNum = 2
 
@@ -23,13 +24,27 @@ def receivePromise(accepted):
 	global myValue
 	global acceptedPromise
 	acceptedPromise.append(accepted)
-	if len(acceptedPromise) >= maj:
+	if len(acceptedPromise) >= majority:
 		for promise in acceptedPromise:
 			if promise.proposalID != None and promise.value != None:
 				 myValue = max(value.value for value in acceptedPromise)
 		acceptedPromise = []
 		return accept(myID, proposalID, myValue)
 	return None
+
+
+def receiveAccepted(accepted):
+	global acceptedAccepted
+	acceptedAccepted.append(accepted)
+	if len(acceptedAccepted) >= majority:
+		for accepted in acceptedAccepted:
+			if accepted.value != myValue:
+				return None
+		return myValue
+	return None
+
+
+
 
 
 #acc = accept(None, None, None)
