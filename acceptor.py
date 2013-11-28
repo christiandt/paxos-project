@@ -1,7 +1,6 @@
 # coding=utf-8
 
 import cPickle as pickle
-from proposal import *
 
 minProposal = None
 accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
@@ -38,12 +37,15 @@ def receivePrepare(proposed):
     global minProposal
     if proposed['proposalID'] >= minProposal:
         minProposal = proposed['proposalID']
-    return accepted
+        return {'senderID': None, 'proposalID' : None, 'value' : None}
+    else:
+        return accepted
 
 
 def receiveAccept(accept):
+    # If the received ID is higher than the local ID, set the local ID to the received ID
     if accept['proposalID'] >= minProposal:
-        accepted = accept
+        accepted = accepted
     return accepted
 
 
@@ -54,32 +56,16 @@ def receiveDecide(result):
         return "SUCCESS"
     else:
         return "FAIL"
-    None
 
 
+def resetValues():
+    global accepted
+    accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
 
+minProposal = 55
+accepted = {'senderID': None, 'proposalID' : 54, 'value' : "Works"}
+propose = {'senderID': None, 'proposalID' : 33}
 
+print receivePrepare(propose)
 
-
-# Is this section needed anymore?
-
-
-#proposalID
-#acceptedProposal
-#acceptedValue
-
-#     if proposed.proposalID > minProposal:
-#         minProposal = proposalID
-#         # Do send/return stuff
-#     if proposed.proposalID == proposalID:
-#         None
-#         # Do send/return stuff      return acceptedProposal, acceptedValue
-
-
-# def receiveAcceptRequest(senderID, proposalID, value):
-#     if proposalID >= self.proposalID:
-#         self.proposalID = proposalID
-#         self.acceptedProposal = proposalID
-#         self.acceptedValue = value
-#     return self.proposalID
 

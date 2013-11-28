@@ -1,4 +1,4 @@
-import socket
+import socket, json
 
 
 TCP_IP = '10.0.0.14'
@@ -11,6 +11,9 @@ s.connect((TCP_IP, TCP_PORT))
 
 while 1:
 	message = raw_input("Command: ")
+
+	if message == "sendProm":
+		message = "ACK:"+json.dumps({'senderID': None, 'proposalID' : None, 'value' : None})
 
 	try:
 		s.send(message)

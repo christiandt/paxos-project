@@ -54,7 +54,7 @@ while 1:
 					result = data[5:]
 					proposemessage = json.dumps(proposer.prepare(result))
 					broadcast("PROPOSE:"+proposemessage)
-					s.send("Received: "+result) # remove
+					#s.send("Received: "+result) # remove
 
 
 				# Else if we have received a end-message, end this connection
@@ -73,11 +73,7 @@ while 1:
 					result = data[8:]
 					proposed = json.loads(result)
 					reply = acceptor.receivePrepare(proposed)
-					reply = json.dumps(reply)
-					if reply == None:
-						s.send("ACK:")
-					else:
-						s.send("ACK:"+reply)
+					s.send("ACK:"+json.dumps(reply))
 
 
 				# Else if we have received an ACK-message, an acceptor has accepted our proposal,
@@ -85,12 +81,10 @@ while 1:
 				# it has the majority of the acceptors accept its proposal
 				elif data[0:4] == "ACK:":
 					result = data[4:]
-					print result
 					result = json.loads(result)
 					reply = proposer.receivePromise(result)
-					acceptmessage = json.dumps(proposer.prepare(result))
 					if reply != None:
-						broadcast("ACCEPT:"+acceptmessage)
+						broadcast("ACCEPT:"+json.dumps(reply))
 
 
 				# Else if we have received an accept-message, forward this to the acceptor
@@ -99,8 +93,7 @@ while 1:
 					result = data[7:]
 					result = json.loads(result)
 					reply = acceptor.receiveAccept(result)
-					acceptedmessage = json.dumps(reply)
-					broadcast("ACCEPTED:"+acceptedmessage)
+					broadcast("ACCEPTED:"+json.dumps(reply))
 
 
 				# Else if we have received an accepted-message, forward this to the proposer
@@ -110,7 +103,10 @@ while 1:
 					result = data[9:]
 					result = json.loads(result)
 					reply = proposer.receiveAccepted(result)
-					if reply != None:
+					if reply == "RESTART":
+						proposemessage = json.dumps(proposer.prepare(reply['value']))
+						broadcast("PROPOSE:"+proposemessage)
+					elif reply != None:
 						broadcast("DECIDE:"+reply)  #reply is a string
 
 
