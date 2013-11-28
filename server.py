@@ -1,7 +1,5 @@
 import socket, select, sys, json
 import proposer, acceptor
-from proposal import *
-from accept import *
 
 
 TCP_IP = socket.gethostbyname(socket.gethostname())
@@ -56,7 +54,7 @@ while 1:
 					result = data[5:]
 					proposemessage = json.dumps(proposer.prepare(result))
 					broadcast("PROPOSE:"+proposemessage)
-					s.send("Received: "+result)
+					s.send("Received: "+result) # remove
 
 
 				# Else if we have received a end-message, end this connection
@@ -87,6 +85,7 @@ while 1:
 				# it has the majority of the acceptors accept its proposal
 				elif data[0:4] == "ACK:":
 					result = data[4:]
+					print result
 					result = json.loads(result)
 					reply = proposer.receivePromise(result)
 					acceptmessage = json.dumps(proposer.prepare(result))

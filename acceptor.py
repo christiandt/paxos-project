@@ -2,10 +2,9 @@
 
 import cPickle as pickle
 from proposal import *
-from accept import *
 
 minProposal = None
-accepted = accept(None, None, None)
+accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
 
 
 def getLog():
@@ -37,13 +36,13 @@ def receiveRead():
 
 def receivePrepare(proposed):
     global minProposal
-    if proposed.proposalID >= minProposal:
-        minProposal = proposed.proposalID
+    if proposed['proposalID'] >= minProposal:
+        minProposal = proposed['proposalID']
     return accepted
 
 
 def receiveAccept(accept):
-    if accept.proposalID >= minProposal:
+    if accept['proposalID'] >= minProposal:
         accepted = accept
     return accepted
 

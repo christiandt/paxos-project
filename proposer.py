@@ -1,8 +1,5 @@
 # coding=utf-8
 
-from proposal import *
-from accept import *
-
 myID = 3			# server ID
 myValue = 7
 proposalID = 0	
@@ -16,7 +13,7 @@ def prepare(post):
 	global proposalID
 	blogpost = post
 	proposalID += 1
-	propose = proposal(myID, proposalID)
+	propose = {'senderID': myID, 'proposalID' : proposalID}
 	return propose
 
 
@@ -26,10 +23,10 @@ def receivePromise(accepted):
 	acceptedPromise.append(accepted)
 	if len(acceptedPromise) >= majority:
 		for promise in acceptedPromise:
-			if promise.proposalID != None and promise.value != None:
-				 myValue = max(value.value for value in acceptedPromise)
+			if promise['proposalID'] != None and promise['value'] != None:
+				 myValue = max(value['value'] for value in acceptedPromise)
 		acceptedPromise = []
-		return accept(myID, proposalID, myValue)
+		return {'senderID': myID, 'proposalID' : proposalID, 'value' : myValue}
 	return None
 
 
@@ -38,7 +35,7 @@ def receiveAccepted(accepted):
 	acceptedAccepted.append(accepted)
 	if len(acceptedAccepted) >= majority:
 		for accepted in acceptedAccepted:
-			if accepted.value != myValue:
+			if accepted['value'] != myValue:
 				return None
 		return myValue
 	return None
