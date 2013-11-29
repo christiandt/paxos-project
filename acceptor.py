@@ -33,19 +33,28 @@ def receiveRead():
     return logString[0:-1]
 
 
-def receivePrepare(proposed):
+def receivePropose(proposed):
     global minProposal
-    if proposed['proposalID'] >= minProposal:
+    global accepted
+    # If we receive a proposal with an ID higher than (or eq) what as allready been proposed,
+    # reply back to proposer with ID None to indicate that we are committing to this proposal
+    if proposed['proposalID'] > minProposal:
         minProposal = proposed['proposalID']
-        return {'senderID': None, 'proposalID' : None, 'value' : None}
-    else:
+        accepted['type'] = "ACK"
         return accepted
+    # If the received ID is lower than what has allready been proposed, reply back to proposer
+    # with the last accepted value
+    else:
+        return {'senderID': None, 'proposalID' : None, 'value' : None, 'type': "NACK"}
+        
 
 
 def receiveAccept(accept):
-    # If the received ID is higher than the local ID, set the local ID to the received ID
+    # If the received ID is higher than (or eq) the local ID, set the local ID to the received ID
+    # and broadcast the accepted value
     if accept['proposalID'] >= minProposal:
-        accepted = accepted
+        accepted = accept
+    # If not, we broadcast the last accepted value
     return accepted
 
 
@@ -58,14 +67,24 @@ def receiveDecide(result):
         return "FAIL"
 
 
-def resetValues():
+def resetValues():   # Is this needed?
     global accepted
     accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
 
-minProposal = 55
-accepted = {'senderID': None, 'proposalID' : 54, 'value' : "Works"}
-propose = {'senderID': None, 'proposalID' : 33}
 
-print receivePrepare(propose)
+
+minProposal = 28
+accepted = {'senderID': None, 'proposalID' : 29, 'value' : "Last accepted"}
+propose = {'senderID': None, 'proposalID' : 30, 'value' : "New Accept"}
+
+print receiveAccept(propose)
+
+
+
+# minProposal = 55
+# accepted = {'senderID': None, 'proposalID' : 54, 'value' : "Works"}
+# propose = {'senderID': None, 'proposalID' : 33}
+
+# print receivePrepare(propose)
 
 

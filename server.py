@@ -14,6 +14,8 @@ connections.append(server)
 print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
+#s.connect(("10.0.0.15", TCP_PORT))
+
 
 def broadcast(message):
 	for socket in connections:
@@ -49,14 +51,6 @@ while 1:
 					s.send(result)
 
 
-				# Else if we have received a post-message, start paxos
-				elif data[0:5] == "POST:":
-					result = data[5:]
-					proposemessage = json.dumps(proposer.prepare(result))
-					broadcast("PROPOSE:"+proposemessage)
-					#s.send("Received: "+result) # remove
-
-
 				# Else if we have received a end-message, end this connection
 				elif data[0:3] == "END":
 					s.send('GOODBYE')
@@ -66,13 +60,21 @@ while 1:
 					break
 
 
+				# Else if we have received a post-message, start paxos
+				elif data[0:5] == "POST:":
+					result = data[5:]
+					proposemessage = json.dumps(proposer.prepare(result))
+					broadcast("PROPOSE:"+proposemessage)
+					#s.send("Received: "+result) # remove
+
+
 				# Else if we have received a propose-message, forward it to an acceptor 
 				# that in turn replies with with eighter its reply if accepted, else returns
 				# an empty string(?)
 				elif data[0:8] == "PROPOSE:":
 					result = data[8:]
 					proposed = json.loads(result)
-					reply = acceptor.receivePrepare(proposed)
+					reply = acceptor.receivePropose(proposed)
 					s.send("ACK:"+json.dumps(reply))
 
 
