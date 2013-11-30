@@ -59,6 +59,7 @@ def receiveAccept(accept):
 
 
 def receiveDecide(result):
+    accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
     log = getLog()
     log.insert(0, result)
     saveLog(log)
