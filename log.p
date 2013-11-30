@@ -1,26 +1,40 @@
 (lp1
-S'test'
+S'Kine er kul'
 p2
-aS'test'
+aS'Kine er kul'
 p3
 aS'Kine er kul'
 p4
-aS'So is Christian'
+aS'Kine er kul'
 p5
-aS'New post'
+aS'Kine er kul'
 p6
-aS'FIRST'
+aS'Kine er kul'
 p7
-aS":( Damn, I wasn't"
+aS'Kine er kul'
 p8
-aS'Kos'
+aS'test'
 p9
-aS'Mos'
+aS'test'
 p10
-aS'Good morning'
+aS'Kine er kul'
 p11
-aS'Good night'
+aS'So is Christian'
 p12
-aS'TISS'
+aS'New post'
 p13
+aS'FIRST'
+p14
+aS":( Damn, I wasn't"
+p15
+aS'Kos'
+p16
+aS'Mos'
+p17
+aS'Good morning'
+p18
+aS'Good night'
+p19
+aS'TISS'
+p20
 a.

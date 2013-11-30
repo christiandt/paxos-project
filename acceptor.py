@@ -2,7 +2,7 @@
 
 import cPickle as pickle
 
-minProposal = None
+minProposal = 0
 accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
 
 
