@@ -40,6 +40,16 @@ def broadcast(message):
 				socket.close()
 				connections.remove(socket)
 
+def shutdown():
+	for socket in connections:
+		if socket != server:
+			socket.send('GOINGDOWN:'+TCP_IP)
+			socket.close()
+	server.close()
+	print 'Goodbye'
+	sys.exit(0)
+
+
 
 while 1:
 	# Check if there are any readable sockets
@@ -172,10 +182,15 @@ while 1:
 				elif data[0:8] == "SHUTDOWN":
 					print 'Shutting Down'
 					#server.shutdown(2)
-					s.send('GOODBYE')
-					server.close()
-					print 'Goodbye'
-					sys.exit(0)
+					shutdown()
+
+
+				elif data[0:10] == 'GOINGDOWN:':
+					ip = data[10:]
+					if s in connections:
+						s.close()
+						connections.remove(s)
+						print ip, "went down"
 
 
 				# Else return an invalid-message
