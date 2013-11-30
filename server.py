@@ -58,7 +58,8 @@ while 1:
 				try:
 					data = s.recv(BUFFER_SIZE)
 				except:
-					print "lost connetion to someone"
+					print "lost connetion to someone1"
+					connections.remove(s)
 				print data
 
 
@@ -177,6 +178,7 @@ while 1:
 					try:
 						s.send('INVALID')
 					except:
-						print "lost connetion to someone"
+						print "lost connetion to someone2"
+						connections.remove(s)
 
 				break
