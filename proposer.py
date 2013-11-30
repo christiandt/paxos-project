@@ -64,11 +64,6 @@ def receivePromise(accepted):
 		return accept
 	return None
 
-	# TEST:
-	# When three ACKs is received (and 1 or 2 NACKs):
-	#   All has value None, some has value None, none has value None
-	# When three NACKs is received: does not have solution yet ?
-
 
 def receiveAccepted(accepted):
 	global acceptedAccepted
@@ -85,10 +80,6 @@ def receiveAccepted(accepted):
 		acceptedAccepted = []
 		return myValue
 	return None
-
-	# TEST:
-	# receive all three with equal or lower proposalID
-	# receive some lower, some higher
 
 
 # acc = {'senderID': None, 'proposalID' : 3, 'value' : "BestestePost"}

@@ -46,14 +46,10 @@ def receivePropose(proposed):
     # with the last accepted value
     else:
         return {'senderID': None, 'proposalID' : None, 'value' : None, 'type': "NACK"}
-        
-    # TEST:
-    # receive a high proposalID when blank
-    # receive a high proposalID when have previously accepted something
-    # receive a proposalID that is lower than minProposal (i.e. lower than a prev. proposalID)
 
 
 def receiveAccept(accept):
+    global accepted
     # If the received ID is higher than (or eq) the local ID, set the local ID to the received ID
     # and broadcast the accepted value
     if accept['proposalID'] >= minProposal:
@@ -61,8 +57,6 @@ def receiveAccept(accept):
     # If not, we broadcast the last accepted value
     return accepted
 
-    # Test:
-    # receive accept where proposalID is higher/lower/equal to minProposal
 
 def receiveDecide(result):
     log = getLog()
