@@ -61,25 +61,5 @@ def receiveAccept(accept):
 def receiveDecide(result):
     log = getLog()
     log.append(data)
-    if saveLog(log):
-        return "SUCCESS"
-    else:
-        return "FAIL"
-
-
-
-# minProposal = 28
-# accepted = {'senderID': None, 'proposalID' : 29, 'value' : "Last accepted"}
-# propose = {'senderID': None, 'proposalID' : 30, 'value' : "New Accept"}
-
-# print receiveAccept(propose)
-
-
-
-# minProposal = 55
-# accepted = {'senderID': None, 'proposalID' : 54, 'value' : "Works"}
-# propose = {'senderID': None, 'proposalID' : 33}
-
-# print receivePrepare(propose)
-
+    saveLog(log):
 

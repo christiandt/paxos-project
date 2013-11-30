@@ -81,19 +81,3 @@ def receiveAccepted(accepted):
 		return myValue
 	return None
 
-
-# acc = {'senderID': None, 'proposalID' : 3, 'value' : "BestestePost"}
-# acc2 = {'senderID': None, 'proposalID' : 3, 'value' : "blogtest"}
-# acc3 = {'senderID': None, 'proposalID' : 3, 'value' : "bestPost"}
-# print receiveAccepted(acc)
-# print receiveAccepted(acc2)
-# print receiveAccepted(acc3)
-
-
-# acc = {'senderID': None, 'proposalID' : 9, 'value' : "BestestePost"}
-# acc2 = {'senderID': None, 'proposalID' : 2, 'value' : "blogtest"}
-# acc3 = {'senderID': None, 'proposalID' : 5, 'value' : "bestPost"}
-# print receivePromise(acc)
-# print receivePromise(acc2)
-# print receivePromise(acc3)['value']
-
