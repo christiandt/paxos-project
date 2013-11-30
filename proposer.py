@@ -37,7 +37,7 @@ def receivePromise(accepted):
 	# If the majority consists of rejections (NACK), add the value to the front of Paxos-queue (restart)
 	if len(notAcceptedPromise) >= majority:
 		# Need to find a way to insert value into restart
-		return None
+		return "RESTART"
 
 	# If we have received reply from the majority
 	elif len(acceptedPromise) >= majority:
@@ -79,7 +79,7 @@ def receiveAccepted(accepted):
 				acceptedAccepted = []	# resets the list
 				return "RESTART"
 		acceptedAccepted = []
-		return myValue	# This is supposed to broadcast some DECIDE-message, right?
+		return myValue
 	return None
 
 	# TEST:
