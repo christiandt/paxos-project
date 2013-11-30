@@ -1,10 +1,12 @@
 # coding=utf-8
+import math
 
 serverID = 3			# server ID
 myValue = ""
 proposalID = serverID	# ProposalID increments 10 with each prepare. Last digit is the server ID
 acceptedPromise = []
 acceptedAccepted = []
+notAcceptedPromise = []
 majority = 3
 maxProposalID = 0
 
@@ -24,6 +26,7 @@ def receivePromise(accepted):
 	global myValue
 	global acceptedPromise
 	global maxProposalID
+	global notAcceptedPromise
 	
 	# If we receive older proposal or a NACK, it shoud not count in the majority
 	if accepted['type'] == "ACK": 
