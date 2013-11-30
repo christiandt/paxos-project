@@ -41,8 +41,7 @@ def receivePromise(accepted):
 
 	# If we have received reply from the majority
 	elif len(acceptedPromise) >= majority:
-		# Reset the list of accepted promises when we broadcast the accept message
-		acceptedPromise = [] # ERASE BEFORE USE???
+		
 		# Find the maximum proposal id of all the accepted promises returned from the acceptors
 		maxProposalID = max(promise['proposalID'] for promise in acceptedPromise)	# Will this one handle "None"?
 		for promise in acceptedPromise:
@@ -52,8 +51,12 @@ def receivePromise(accepted):
 				if promise['proposalID'] == maxProposalID:
 					# promise['value'] should be added to the front of the paxos queue
 					accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : promise['value']}
+					# Reset the list of accepted promises when we broadcast the accept message
+					acceptedPromise = []
 					return accept
 		accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue}
+		# Reset the list of accepted promises when we broadcast the accept message
+		acceptedPromise = []
 		return accept
 	return None
 
