@@ -42,9 +42,9 @@ def receivePromise(accepted):
 	# If we have received reply from the majority
 	elif len(acceptedPromise) >= majority:
 		# Reset the list of accepted promises when we broadcast the accept message
-		acceptedPromise = []
+		acceptedPromise = [] # ERASE BEFORE USE???
 		# Find the maximum proposal id of all the accepted promises returned from the acceptors
-		maxProposalID = max(promise['proposalID'] for promise in acceptedPromise)
+		maxProposalID = max(promise['proposalID'] for promise in acceptedPromise)	# Will this one handle "None"?
 		for promise in acceptedPromise:
 			if maxProposalID != None:
 				# If not all proposal IDs are None, set myValue to the value of the proposal 
@@ -57,6 +57,11 @@ def receivePromise(accepted):
 		return accept
 	return None
 
+	# TEST:
+	# When three ACKs is received (and 1 or 2 NACKs):
+	#   All has value None, some has value None, none has value None
+	# When three NACKs is received: does not have solution yet ?
+
 
 def receiveAccepted(accepted):
 	global acceptedAccepted
@@ -68,12 +73,15 @@ def receiveAccepted(accepted):
 		# If so, restart proposal
 		for accepted in acceptedAccepted:
 			if accepted['proposalID'] > proposalID:
-				acceptedAccepted = []
+				acceptedAccepted = []	# resets the list
 				return "RESTART"
 		acceptedAccepted = []
-		return myValue
+		return myValue	# This is supposed to broadcast some DECIDE-message, right?
 	return None
 
+	# TEST:
+	# receive all three with equal or lower proposalID
+	# receive some lower, some higher
 
 
 # acc = {'senderID': None, 'proposalID' : 3, 'value' : "BestestePost"}
