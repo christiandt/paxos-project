@@ -124,14 +124,16 @@ while 1:
 					if reply == "RESTART":
 						proposemessage = json.dumps(proposer.prepare(reply['value'])) # This makes no sense
 						broadcast("PROPOSE:"+proposemessage)
+
 					elif reply != None:
 						broadcast("DECIDE:"+reply)  #reply is a string
-						if len(posts)=0:
+
+						if len(posts)==0:
 							paxosRunning = False
 						else:
 							post = posts[0]
 							posts.remove(posts[0])
-							proposemessage = json.dumps(proposer.prepare(post) # This makes sense
+							proposemessage = json.dumps(proposer.prepare(post)) # This makes sense
 							broadcast("PROPOSE:"+proposemessage)
 
 
