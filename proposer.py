@@ -1,5 +1,5 @@
 # coding=utf-8
-import math
+import math, acceptor 
 
 serverID = 3			# server ID
 myValue = ""
@@ -7,11 +7,12 @@ proposalID = serverID	# ProposalID increments 10 with each prepare. Last digit i
 acceptedPromise = []
 acceptedAccepted = []
 notAcceptedPromise = []
-majority = 3
+majority = 1
 maxProposalID = 0
 
 
 def prepare(post):
+	global myValue
 	global proposalID
 	global maxProposalID
 	myValue = post 		# Set the local value to the received post-message
@@ -77,6 +78,7 @@ def receiveAccepted(accepted):
 				acceptedAccepted = []	# resets the list
 				return "RESTART"
 		acceptedAccepted = []
+		acceptor.receiveDecide(myValue)
 		return myValue
 	return None
 
