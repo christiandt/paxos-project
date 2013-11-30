@@ -56,7 +56,7 @@ def receivePromise(accepted):
 					notAcceptedPromise = []
 					acceptedPromise = []
 					return accept
-		accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue, 'conflict' : False}
+		accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue, 'conflict' : None}
 		# Reset the list of accepted promises when we broadcast the accept message
 		notAcceptedPromise = []
 		acceptedPromise = []

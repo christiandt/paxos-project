@@ -20,7 +20,7 @@ print "Address", TCP_IP, ":", TCP_PORT
 ips = ["10.0.0.96", "10.0.0.15"]
 for ip in ips:
 	try:
-		s.connect((ip, TCP_PORT))
+		server.connect((ip, TCP_PORT))
 	except:
 		print "No contact with", ip
 
@@ -99,15 +99,18 @@ while 1:
 					result = json.loads(result)
 					reply = proposer.receivePromise(result)
 					if reply == "RESTART":
-						proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
+						# In this case, propose your own value again, before others in queue
+						proposemessage = json.dumps(proposer.prepare(proposer.myValue))
 						broadcast("PROPOSE:"+proposemessage)
+					# When majority is received, check if conflict has occured (previous proposal accepted,
+					# but not decided), if so, insert post first in queue.
 					elif reply != None:
 						reply = json.dumps(reply)
-						if reply['conflict'] != False:
+						if reply['conflict'] != None:
 							post = reply['conflict']
 							posts.insert(0, post)
 							# Conflict occured, add post to begining of posts, continue as normal
-							del reply['conflict']
+						del reply['conflict']
 						broadcast("ACCEPT:"+reply)
 
 
@@ -131,10 +134,11 @@ while 1:
 						proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
 						broadcast("PROPOSE:"+proposemessage)
 
+					# Reply is None until majority is reached, reply is the value as a string
 					elif reply != None:
 						broadcast("DECIDE:"+reply)  #reply is a string
 
-						if posts:
+						if not posts:
 							paxosRunning = False
 						else:
 							post = posts.pop(0)
