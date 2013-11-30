@@ -31,7 +31,6 @@ def receivePromise(accepted):
 	global myValue
 	global acceptedPromise
 	global notAcceptedPromise
-	# global maxProposalID
 	
 	# If we receive older proposal or a NACK, it shoud not count in the majority
 	if accepted['type'] == "ACK": 
