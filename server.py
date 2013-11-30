@@ -17,12 +17,12 @@ print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
 # add try-except to connects. Need to handle servers that are not turned on
-# ips = ["10.0.0.15"]
-# for ip in ips:
-# 	try:
-# 		s.connect((ip, TCP_PORT))
-# 	except:
-# 		print "No contact with", ip
+ips = ["10.0.0.96", "10.0.0.15"]
+for ip in ips:
+	try:
+		s.connect((ip, TCP_PORT))
+	except:
+		print "No contact with", ip
 
 
 
@@ -99,10 +99,16 @@ while 1:
 					result = json.loads(result)
 					reply = proposer.receivePromise(result)
 					if reply == "RESTART":
-						proposemessage = json.dumps(proposer.prepare(reply['value'])) # This makes no sende
+						proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
 						broadcast("PROPOSE:"+proposemessage)
 					elif reply != None:
-						broadcast("ACCEPT:"+json.dumps(reply))
+						reply = json.dumps(reply)
+						if reply['conflict'] != False:
+							post = reply['conflict']
+							posts.insert(0, post)
+							# Conflict occured, add post to begining of posts, continue as normal
+							del reply['conflict']
+						broadcast("ACCEPT:"+reply)
 
 
 				# Else if we have received an accept-message, forward this to the acceptor
@@ -122,17 +128,16 @@ while 1:
 					result = json.loads(result)
 					reply = proposer.receiveAccepted(result)
 					if reply == "RESTART":
-						proposemessage = json.dumps(proposer.prepare(reply['value'])) # This makes no sense
+						proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
 						broadcast("PROPOSE:"+proposemessage)
 
 					elif reply != None:
 						broadcast("DECIDE:"+reply)  #reply is a string
 
-						if len(posts)==0:
+						if posts:
 							paxosRunning = False
 						else:
-							post = posts[0]
-							posts.remove(posts[0])
+							post = posts.pop(0)
 							proposemessage = json.dumps(proposer.prepare(post)) # This makes sense
 							broadcast("PROPOSE:"+proposemessage)
 

@@ -36,7 +36,6 @@ def receivePromise(accepted):
 
 	# If the majority consists of rejections (NACK), add the value to the front of Paxos-queue (restart)
 	if len(notAcceptedPromise) >= majority:
-		# Need to find a way to insert value into restart
 		notAcceptedPromise = []
 		acceptedPromise = []
 		return "RESTART"
@@ -52,12 +51,12 @@ def receivePromise(accepted):
 				# with the highest proposal ID
 				if promise['proposalID'] == maxProposalID:
 					# promise['value'] should be added to the front of the paxos queue
-					accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : promise['value']}
+					accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : promise['value'], 'conflict' : myValue}
 					# Reset the list of accepted promises when we broadcast the accept message
 					notAcceptedPromise = []
 					acceptedPromise = []
 					return accept
-		accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue}
+		accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue, 'conflict' : False}
 		# Reset the list of accepted promises when we broadcast the accept message
 		notAcceptedPromise = []
 		acceptedPromise = []
