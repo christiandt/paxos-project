@@ -8,14 +8,21 @@ acceptedPromise = []
 acceptedAccepted = []
 notAcceptedPromise = []
 majority = 1
+maxProposalID = 0
 
 
 def prepare(post):
 	global myValue
 	global proposalID
+	global maxProposalID
 	myValue = post 		# Set the local value to the received post-message
-	proposalID = int(math.floor((acceptor.minProposal+10)/10) * 10 + serverID)		# MUST FIX FAAAA
-	print "Proposal ID: ", proposalID 												# CHANGED
+	
+	if maxProposalID != None:
+	    maxProposalID += 10
+	    proposalID = int(math.floor(maxProposalID/10) * 10 + serverID)	# changed back
+	else:
+		proposalID+=10
+
 	propose = {'senderID': serverID, 'proposalID' : proposalID}
 	return propose
 
@@ -24,6 +31,7 @@ def receivePromise(accepted):
 	global myValue
 	global acceptedPromise
 	global notAcceptedPromise
+	# global maxProposalID
 	
 	# If we receive older proposal or a NACK, it shoud not count in the majority
 	if accepted['type'] == "ACK": 
