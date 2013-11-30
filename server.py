@@ -6,6 +6,8 @@ TCP_IP = socket.gethostbyname(socket.gethostname())
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 connections = []
+posts = []
+paxosRunning = False
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((TCP_IP, TCP_PORT))
@@ -14,10 +16,18 @@ connections.append(server)
 print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
-#s.connect(("10.0.0.15", TCP_PORT))
+# add try-except to connects. Need to handle servers that are not turned on
+# ips = ["10.0.0.15"]
+# for ip in ips:
+# 	try:
+# 		s.connect((ip, TCP_PORT))
+# 	except:
+# 		print "No contact with", ip
+
 
 
 def broadcast(message):
+	print "Broadcasting: ", message
 	for socket in connections:
 		if socket != server:
 			try :
@@ -63,8 +73,11 @@ while 1:
 				# Else if we have received a post-message, start paxos
 				elif data[0:5] == "POST:":
 					result = data[5:]
-					proposemessage = json.dumps(proposer.prepare(result))
-					broadcast("PROPOSE:"+proposemessage)
+					if paxosRunning:
+						posts.append(result)
+					else:
+						proposemessage = json.dumps(proposer.prepare(result))
+						broadcast("PROPOSE:"+proposemessage)
 					#s.send("Received: "+result) # remove
 
 
@@ -85,7 +98,10 @@ while 1:
 					result = data[4:]
 					result = json.loads(result)
 					reply = proposer.receivePromise(result)
-					if reply != None:
+					if reply == "RESTART":
+						proposemessage = json.dumps(proposer.prepare(reply['value'])) # This makes no sende
+						broadcast("PROPOSE:"+proposemessage)
+					elif reply != None:
 						broadcast("ACCEPT:"+json.dumps(reply))
 
 
@@ -106,10 +122,18 @@ while 1:
 					result = json.loads(result)
 					reply = proposer.receiveAccepted(result)
 					if reply == "RESTART":
-						proposemessage = json.dumps(proposer.prepare(reply['value']))
+						proposemessage = json.dumps(proposer.prepare(reply['value'])) # This makes no sense
 						broadcast("PROPOSE:"+proposemessage)
 					elif reply != None:
 						broadcast("DECIDE:"+reply)  #reply is a string
+						if len(posts)=0:
+							paxosRunning = False
+						else:
+							post = posts[0]
+							posts.remove(posts[0])
+							proposemessage = json.dumps(proposer.prepare(post) # This makes sense
+							broadcast("PROPOSE:"+proposemessage)
+
 
 
 				# Else if we have received a decide-message, a value has been decided, forward
