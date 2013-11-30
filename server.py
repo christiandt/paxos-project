@@ -55,7 +55,10 @@ while 1:
 		else:
 			while 1:
 
-				data = s.recv(BUFFER_SIZE)
+				try:
+					data = s.recv(BUFFER_SIZE)
+				except:
+					print "lost connetion to someone"
 				print data
 
 
