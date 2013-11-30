@@ -56,7 +56,9 @@ def receivePromise(accepted):
 				# with the highest proposal ID
 				if promise['proposalID'] == maxProposalID:
 					# promise['value'] should be added to the front of the paxos queue
-					accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : promise['value'], 'conflict' : myValue}
+					myOldValue = myValue
+					myValue = promise['value']
+					accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue, 'conflict' : myOldValue}
 					# Reset the list of accepted promises when we broadcast the accept message
 					notAcceptedPromise = []
 					acceptedPromise = []
