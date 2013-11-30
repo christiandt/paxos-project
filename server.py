@@ -17,7 +17,7 @@ print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
 # add try-except to connects. Need to handle servers that are not turned on
-ips = ["10.0.0.96", "10.0.0.15"]
+ips = ["10.0.0.15"]
 for ip in ips:
 	try:
 		server.connect((ip, TCP_PORT))
