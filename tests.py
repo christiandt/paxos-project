@@ -18,9 +18,9 @@ class paxosTests(unittest.TestCase):
 
 		# Proposer discards self-value since received others from acceptor, sets its value to highest
 	def test_proposerReceivePromise_allACK_withValue(self):
-		acc = {'senderID': None, 'proposalID' : 9, 'value' : "BestestePost", 'type' : "ACK"}
-		acc2 = {'senderID': None, 'proposalID' : 2, 'value' : "blogtest", 'type' : "ACK"}
-		acc3 = {'senderID': None, 'proposalID' : 5, 'value' : "bestPost", 'type' : "ACK"}
+		acc = {'proposalID' : 9, 'value' : "BestestePost", 'type' : "ACK"}
+		acc2 = {'proposalID' : 2, 'value' : "blogtest", 'type' : "ACK"}
+		acc3 = {'proposalID' : 5, 'value' : "bestPost", 'type' : "ACK"}
 		proposer.receivePromise(acc)
 		proposer.receivePromise(acc2)
 		self.assertEqual(acc['value'], proposer.receivePromise(acc3)['value'])
@@ -29,9 +29,9 @@ class paxosTests(unittest.TestCase):
 		# Proposer gets majority of ACK, none with proposalIDs, returns its own value
 	def test_proposerReceivePromise_allACK_withoutValue(self):
 		proposer.proposalID = 34
-		acc1 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "ACK"}
-		acc2 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "ACK"}
-		acc3 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "ACK"}
+		acc1 = {'proposalID' : None, 'value' : None, 'type' : "ACK"}
+		acc2 = {'proposalID' : None, 'value' : None, 'type' : "ACK"}
+		acc3 = {'proposalID' : None, 'value' : None, 'type' : "ACK"}
 		proposer.receivePromise(acc1)
 		proposer.receivePromise(acc2)
 		self.assertEqual(proposer.proposalID, proposer.receivePromise(acc3)['proposalID'])
@@ -39,9 +39,9 @@ class paxosTests(unittest.TestCase):
 
 		# When received majority of NACKs, give up / restart
 	def test_proposerReceivePromise_allNACK(self):
-		nacc = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "NACK"}		
-		nacc1 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "NACK"}		
-		nacc2 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "NACK"}
+		nacc = {'proposalID' : None, 'value' : None, 'type' : "NACK"}		
+		nacc1 = {'proposalID' : None, 'value' : None, 'type' : "NACK"}		
+		nacc2 = {'proposalID' : None, 'value' : None, 'type' : "NACK"}
 		proposer.receivePromise(nacc)
 		proposer.receivePromise(nacc1)
 		self.assertEqual("RESTART", proposer.receivePromise(nacc2))
@@ -49,11 +49,11 @@ class paxosTests(unittest.TestCase):
 
 		# Behaviour when receive both NACK and ACK, maj of ACK in last round
 	def test_proposerReceivePromise_misc(self):
-		acc1 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "ACK"}
-		acc2 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "ACK"}
-		acc3 = {'senderID': None, 'proposalID' : 9, 'value' : "BestestePost", 'type' : "ACK"}
-		nacc1 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "NACK"}
-		nacc2 = {'senderID': None, 'proposalID' : None, 'value' : None, 'type' : "NACK"}
+		acc1 = {'proposalID' : None, 'value' : None, 'type' : "ACK"}
+		acc2 = {'proposalID' : None, 'value' : None, 'type' : "ACK"}
+		acc3 = {'proposalID' : 9, 'value' : "BestestePost", 'type' : "ACK"}
+		nacc1 = {'proposalID' : None, 'value' : None, 'type' : "NACK"}
+		nacc2 = {'proposalID' : None, 'value' : None, 'type' : "NACK"}
 		proposer.receivePromise(acc1)
 		proposer.receivePromise(acc2)
 		proposer.receivePromise(nacc1)
@@ -63,10 +63,10 @@ class paxosTests(unittest.TestCase):
 
 	def test_proposerReceiveAccepted(self):
 		proposer.myValue = "Kine er kul"
-		acc = {'senderID': None, 'proposalID' : 12, 'value' : "BestestePost"}
-		acc2 = {'senderID': None, 'proposalID' : 2, 'value' : "blogtest"}
-		acc3 = {'senderID': None, 'proposalID' : 5, 'value' : "bestPost"}
-		acc4 = {'senderID': None, 'proposalID' : 13, 'value' : "bestPost"}
+		acc = {'proposalID' : 12, 'value' : "BestestePost"}
+		acc2 = {'proposalID' : 2, 'value' : "blogtest"}
+		acc3 = {'proposalID' : 5, 'value' : "bestPost"}
+		acc4 = {'proposalID' : 13, 'value' : "bestPost"}
 		proposer.receiveAccepted(acc)
 		proposer.receiveAccepted(acc2)
 		

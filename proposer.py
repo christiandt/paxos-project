@@ -7,15 +7,15 @@ proposalID = serverID	# ProposalID increments 10 with each prepare. Last digit i
 acceptedPromise = []
 acceptedAccepted = []
 notAcceptedPromise = []
-majority = 3
+majority = 1
 
 
 def prepare(post):
 	global myValue
 	global proposalID
 	myValue = post 		# Set the local value to the received post-message
-	proposalID = int(math.floor((acceptor.minProposal+10)/10) * 10 + serverID)
-	
+	proposalID = int(math.floor((acceptor.minProposal+10)/10) * 10 + serverID)		# MUST FIX FAAAA
+	print "Proposal ID: ", proposalID 												# CHANGED
 	propose = {'senderID': serverID, 'proposalID' : proposalID}
 	return propose
 
