@@ -67,17 +67,12 @@ def receiveDecide(result):
         return "FAIL"
 
 
-def resetValues():   # Is this needed?
-    global accepted
-    accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
 
+# minProposal = 28
+# accepted = {'senderID': None, 'proposalID' : 29, 'value' : "Last accepted"}
+# propose = {'senderID': None, 'proposalID' : 30, 'value' : "New Accept"}
 
-
-minProposal = 28
-accepted = {'senderID': None, 'proposalID' : 29, 'value' : "Last accepted"}
-propose = {'senderID': None, 'proposalID' : 30, 'value' : "New Accept"}
-
-print receiveAccept(propose)
+# print receiveAccept(propose)
 
 
 

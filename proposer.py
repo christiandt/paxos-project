@@ -7,7 +7,6 @@ acceptedPromise = []
 acceptedAccepted = []
 majority = 3
 maxProposalID = 0
-minProposal = 0
 
 
 def prepare(post):
@@ -25,18 +24,20 @@ def receivePromise(accepted):
 	global myValue
 	global acceptedPromise
 	global maxProposalID
-	global minProposal
 	
 	# If we receive older proposal or a NACK, it shoud not count in the majority
-	if accepted['type'] == "ACK": # If this is the case, why hust not send it in the first place? Should we about if majority is nack?
-		# Do not accept allready used IDs
-		if accepted['proposalID'] >= minProposal:
-			minProposal = accepted['proposalID']
-			acceptedPromise.append(accepted)
+	if accepted['type'] == "ACK": 
+		acceptedPromise.append(accepted)
+	elif accepted['type'] == "NACK":
+		notAcceptedPromise.append(accepted)
 
+	# If the majority consists of rejections (NACK), add the value to the front of Paxos-queue (restart)
+	if len(notAcceptedPromise) >= majority:
+		# Need to find a way to insert value into restart
+		return None
 
 	# If we have received reply from the majority
-	if len(acceptedPromise) >= majority:
+	elif len(acceptedPromise) >= majority:
 		# Reset the list of accepted promises when we broadcast the accept message
 		acceptedPromise = []
 		# Find the maximum proposal id of all the accepted promises returned from the acceptors
@@ -46,7 +47,7 @@ def receivePromise(accepted):
 				# If not all proposal IDs are None, set myValue to the value of the proposal 
 				# with the highest proposal ID
 				if promise['proposalID'] == maxProposalID:
-					#myValue = promise['value']   # What? Why do we delete our value???
+					# promise['value'] should be added to the front of the paxos queue
 					accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : promise['value']}
 					return accept
 		accept = {'senderID': serverID, 'proposalID' : proposalID, 'value' : myValue}
@@ -56,9 +57,7 @@ def receivePromise(accepted):
 
 def receiveAccepted(accepted):
 	global acceptedAccepted
-	# Do not accept allready used IDs
-	if accepted['proposalID'] >= minProposal:
-		acceptedAccepted.append(accepted)
+	acceptedAccepted.append(accepted)
 
 	# Require a majority
 	if len(acceptedAccepted) >= majority: 
@@ -72,12 +71,6 @@ def receiveAccepted(accepted):
 		return myValue
 	return None
 
-
-def resetValues():   # Is this needed?
-	myValue = ""
-	proposalID = serverID
-	acceptedPromise = []
-	acceptedAccepted = []
 
 
 # acc = {'senderID': None, 'proposalID' : 3, 'value' : "BestestePost"}
