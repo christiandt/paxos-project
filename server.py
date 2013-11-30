@@ -19,12 +19,13 @@ print "Address", TCP_IP, ":", TCP_PORT
 # add try-except to connects. Need to handle servers that are not turned on
 ips = ["10.0.0.14"]
 for ip in ips:
-	try:
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.connect((ip, TCP_PORT))
-		connections.append(s)
-	except:
-		print "No contact with", ip
+	if ip != TCP_IP:
+		try:
+			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			s.connect((ip, TCP_PORT))
+			connections.append(s)
+		except:
+			print "No contact with", ip
 
 
 
