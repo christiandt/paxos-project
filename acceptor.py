@@ -60,6 +60,6 @@ def receiveAccept(accept):
 
 def receiveDecide(result):
     log = getLog()
-    log.append(data)
+    log.append(result)
     saveLog(log)
 

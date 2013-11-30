@@ -17,10 +17,12 @@ print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
 # add try-except to connects. Need to handle servers that are not turned on
-ips = ["10.0.0.15"]
+ips = ["10.0.0.14"]
 for ip in ips:
 	try:
-		server.connect((ip, TCP_PORT))
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		s.connect((ip, TCP_PORT))
+		connections.append(s)
 	except:
 		print "No contact with", ip
 
@@ -53,6 +55,7 @@ while 1:
 			while 1:
 
 				data = s.recv(BUFFER_SIZE)
+				print data
 
 
 				# If we have received a read-message return the log as a string
@@ -105,12 +108,13 @@ while 1:
 					# When majority is received, check if conflict has occured (previous proposal accepted,
 					# but not decided), if so, insert post first in queue.
 					elif reply != None:
-						reply = json.dumps(reply)
+						print reply
 						if reply['conflict'] != None:
 							post = reply['conflict']
 							posts.insert(0, post)
 							# Conflict occured, add post to begining of posts, continue as normal
 						del reply['conflict']
+						reply = json.dumps(reply)
 						broadcast("ACCEPT:"+reply)
 
 
