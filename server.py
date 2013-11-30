@@ -61,6 +61,7 @@ while 1:
 				except:
 					print "lost connetion to someone1"
 					if s in connections:
+						s.close()
 						connections.remove(s)
 
 				if debug:
@@ -180,5 +181,15 @@ while 1:
 				# Else return an invalid-message
 				elif data != "":
 					s.send('INVALID')
+
+
+				else:
+					try:
+						s.send('PING')
+					except:
+						print "Could not send PING"
+						if s in connections:
+							s.close()
+							connections.remove(s)
 
 				break
