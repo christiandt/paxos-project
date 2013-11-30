@@ -176,11 +176,6 @@ while 1:
 
 				# Else return an invalid-message
 				else:
-					try:
-						s.send('INVALID')
-					except:
-						print "lost connetion to someone2"
-						if s in connections:
-							connections.remove(s)
+					s.send('INVALID')
 
 				break
