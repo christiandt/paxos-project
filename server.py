@@ -32,12 +32,12 @@ for ip in ips:
 def broadcast(message):
 	print "Broadcasting: ", message
 	for socket in connections:
-		if socket != server:
-			try :
-				socket.send(message)
-			except :
-				socket.close()
-				connections.remove(socket)
+#		if socket != server:
+		try :
+			socket.send(message)
+		except :
+			socket.close()
+			connections.remove(socket)
 
 
 while 1:

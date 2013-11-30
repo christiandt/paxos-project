@@ -1,7 +1,7 @@
 import socket, json
 
 
-TCP_IP = '10.0.0.15'
+TCP_IP = '10.0.0.14'
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 
@@ -18,6 +18,12 @@ while 1:
 	try:
 		s.send(message)
 		data = s.recv(BUFFER_SIZE)
+
+		if data[0:8] == "PROPOSE:":
+			data = s.recv(BUFFER_SIZE)
+		elif data[0:7] == "ACCEPT:":
+			data = s.recv(BUFFER_SIZE)
+
 		print data
 		if data[0:7] == "GOODBYE":
 			s.close()
