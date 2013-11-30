@@ -5,6 +5,7 @@ import proposer, acceptor
 TCP_IP = socket.gethostbyname(socket.gethostname())
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
+debug = False
 connections = []
 posts = []
 paxosRunning = False
@@ -61,7 +62,9 @@ while 1:
 					print "lost connetion to someone1"
 					if s in connections:
 						connections.remove(s)
-				print data
+
+				if debug:
+					print data
 
 
 				# If we have received a read-message return the log as a string
@@ -175,7 +178,7 @@ while 1:
 
 
 				# Else return an invalid-message
-				else:
+				elif data != "":
 					s.send('INVALID')
 
 				break
