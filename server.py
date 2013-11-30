@@ -171,6 +171,9 @@ while 1:
 
 				# Else return an invalid-message
 				else:
-					s.send('INVALID')
+					try:
+						s.send('INVALID')
+					except:
+						print "lost connetion to someone"
 
 				break
