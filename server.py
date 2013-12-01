@@ -70,7 +70,7 @@ while 1:
 				try:
 					data = s.recv(BUFFER_SIZE)
 				except:
-					print "lost connetion to someone1"
+					print "Did not receive data"
 					if s in connections:
 						s.close()
 						connections.remove(s)

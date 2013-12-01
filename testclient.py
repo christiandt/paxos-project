@@ -37,7 +37,7 @@ while 1:
 	while 1:
 		try:
 			part = s.recv(BUFFER_SIZE)
-			if part[0:8] != "PROPOSE:" and part[0:7] != "ACCEPT:" and part[0:7] != "DECIDE:":
+			if part[0:8] != "PROPOSE:" and part[0:7] != "ACCEPT:" and part[0:7] != "DECIDE:" and part[0:9] != "ACCEPTED:":
 				data += str(part)
 		except socket.timeout:
 			break
