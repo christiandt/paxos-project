@@ -7,30 +7,41 @@ BUFFER_SIZE = 1024
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
+s.settimeout(1)
 
+data = None
 
 while 1:
-	message = raw_input("Command: ")
 
-	if message == "sendProm":
-		message = "ACK:"+json.dumps({'senderID': None, 'proposalID' : None, 'value' : None})
+	message = raw_input("Command: ")
 
 	try:
 		s.send(message)
-		data = s.recv(BUFFER_SIZE)
-
-		if data[0:8] == "PROPOSE:":
-			None
-		elif data[0:7] == "ACCEPT:":
-			None
-		elif data[0:7] == "GOODBYE":
-			s.close()
-			break
-		else:
-			print data
-
 	except:
-		print "DISCONNECTED"
+		print "Could not send message, disconnecting"
 		s.close()
 		break
 
+	if message[0:3] == "END":
+		print "goodbye"
+		s.close()
+		break
+
+	elif message[0:8] == "SHUTDOWN":
+		print "Server going down"
+		s.close()
+		break
+
+	data = ""
+
+	while 1:
+		try:
+			part = s.recv(BUFFER_SIZE)
+			
+			if data[0:8] != "PROPOSE:" or data[0:7] != "ACCEPT:":
+				data += str(part)
+		except socket.timeout:
+			break
+
+	else:
+		print data
