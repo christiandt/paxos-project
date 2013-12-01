@@ -31,7 +31,8 @@ for ip in ips:
 
 
 def broadcast(message):
-	print "Broadcasting: ", message
+	if debug:
+		print "Broadcasting: ", message
 	for socket in connections:
 		if socket != server:
 			try :

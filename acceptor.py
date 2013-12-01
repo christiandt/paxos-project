@@ -60,6 +60,7 @@ def receiveAccept(accept):
 
 def receiveDecide(result):
     global accepted
+    print "Decided: ", result
     accepted = {'senderID': None, 'proposalID' : None, 'value' : None}
     log = getLog()
     log.insert(0, result)
