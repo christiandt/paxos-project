@@ -18,7 +18,7 @@ print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
 # add try-except to connects. Need to handle servers that are not turned on
-ips = ["54.242.19.60", "54.242.93.180", "54.227.52.32"]
+ips = ["10.178.5.109", "10.165.22.59", "10.185.226.76"]
 for ip in ips:
 	if ip != TCP_IP:
 		try:
@@ -139,12 +139,12 @@ while 1:
 
 
 				# Else if we have received an accept-message, forward this to the acceptor
-				# which in turn broadcasts an accepted-message if it accepted the value
+				# which in turn responds an accepted-message if it accepted the value
 				elif data[0:7] == "ACCEPT:":
 					result = data[7:]
 					result = json.loads(result)
 					reply = acceptor.receiveAccept(result)
-					broadcast("ACCEPTED:"+json.dumps(reply))
+					s.send("ACCEPTED:"+json.dumps(reply))  # Does not broadcast
 
 
 				# Else if we have received an accepted-message, forward this to the proposer
