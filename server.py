@@ -129,7 +129,6 @@ while 1:
 					# When majority is received, check if conflict has occured (previous proposal accepted,
 					# but not decided), if so, insert post first in queue.
 					elif reply != None:
-						print reply
 						if reply['conflict'] != None:
 							post = reply['conflict']
 							posts.insert(0, post)

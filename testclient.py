@@ -20,14 +20,14 @@ while 1:
 		data = s.recv(BUFFER_SIZE)
 
 		if data[0:8] == "PROPOSE:":
-			data = s.recv(BUFFER_SIZE)
+			None
 		elif data[0:7] == "ACCEPT:":
-			data = s.recv(BUFFER_SIZE)
-
-		print data
-		if data[0:7] == "GOODBYE":
+			None
+		elif data[0:7] == "GOODBYE":
 			s.close()
 			break
+		else:
+			print data
 
 	except:
 		print "DISCONNECTED"
