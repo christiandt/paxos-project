@@ -1,4 +1,4 @@
-import socket, select, sys, json
+import socket, select, sys, json, time
 import proposer, acceptor
 
 
@@ -160,6 +160,7 @@ while 1:
 
 					# Reply is None until majority is reached, reply is the value as a string
 					elif reply != None:
+						time.sleep(0.5)
 						broadcast("DECIDE:"+reply)  #reply is a string
 
 						if not posts:
