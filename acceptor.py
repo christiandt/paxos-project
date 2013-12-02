@@ -41,6 +41,7 @@ def receivePropose(proposed):
     if proposed['proposalID'] > minProposal:
         minProposal = proposed['proposalID']
         accepted['type'] = "ACK"
+        proposed['senderPropID'] = minProposal
         return accepted
     # If the received ID is lower than what has allready been proposed, reply back to proposer
     # with the last accepted value

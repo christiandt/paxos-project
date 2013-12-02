@@ -38,7 +38,7 @@ def receivePromise(accepted):
 	global myValue
 	global acceptedPromise
 	global notAcceptedPromise
-	
+
 	if accepted['senderPropID'] != proposalID: return 		# Throw away old ACK/NACK
 
 	# If we receive older proposal or a NACK, it shoud not count in the majority
