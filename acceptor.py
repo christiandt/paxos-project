@@ -45,7 +45,7 @@ def receivePropose(proposed):
     # If the received ID is lower than what has allready been proposed, reply back to proposer
     # with the last accepted value
     else:
-        return {'senderID': None, 'proposalID' : None, 'value' : None, 'type': "NACK"}
+        return {'senderID': None, 'proposalID' : None, 'value' : None, 'type': "NACK", 'senderPropID': proposed['proposalID']}          # CHANGED
 
 
 def receiveAccept(accept):
