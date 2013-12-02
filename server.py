@@ -157,15 +157,6 @@ while 1:
 								post = json.loads(result)
 								acceptor.receiveDecide(post)
 
-							else:
-								try:
-									s.send('PING')
-								except:
-									print "Could not send PING"
-									if s in connections:
-										s.close()
-										connections.remove(s)
-
 				else:
 					# If we have received a read-message return the log as a string
 					if receivedData[0:4] == "READ":
@@ -210,6 +201,16 @@ while 1:
 					# Else return an invalid-message
 					elif receivedData != "":
 						s.send('INVALID')
+
+
+					else:
+						try:
+							s.send('PING')
+						except:
+							print "Could not send PING"
+							if s in connections:
+								s.close()
+								connections.remove(s)
 
 
 				break
