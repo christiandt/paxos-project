@@ -18,7 +18,7 @@ print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
 # add try-except to connects. Need to handle servers that are not turned on
-ips = ["10.0.0.14", "10.0.0.15", "10.0.0.100"]
+ips = ["10.0.0.13", "10.0.0.14", "10.0.0.15", "10.0.0.100"]
 for ip in ips:
 	if ip != TCP_IP:
 		try:
