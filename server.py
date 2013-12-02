@@ -5,7 +5,7 @@ import proposer, acceptor
 TCP_IP = socket.gethostbyname(socket.gethostname())
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
-debug = False
+debug = True
 connections = []
 posts = []
 paxosRunning = False
