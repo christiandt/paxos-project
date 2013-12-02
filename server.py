@@ -70,7 +70,7 @@ while 1:
 				try:
 					receivedData = s.recv(BUFFER_SIZE)
 				except:
-					print "Did not receive receivedData"
+					print "Did not receive data"
 					if s in connections:
 						s.close()
 						connections.remove(s)
@@ -139,7 +139,7 @@ while 1:
 
 								# Reply is None until majority is reached, reply is the value as a string
 								elif reply != None:
-									broadcast("DECIDE:"+{'value': reply})  #reply is a string
+									broadcast("DECIDE:"+json.dumps({'value': reply}))  #reply is a string
 
 									if not posts:
 										paxosRunning = False
