@@ -154,7 +154,7 @@ while 1:
 							# to acceptor which stores the value in the log
 							elif data[0:7] == "DECIDE:":
 								result = data[7:] #result is a string
-								post = json.loads(result)
+								post = json.loads(result)['value']
 								acceptor.receiveDecide(post)
 
 				else:
