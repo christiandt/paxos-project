@@ -78,138 +78,138 @@ while 1:
 				if debug:
 					print receivedData
 
+				if "}" in receivedData:
 
-				for data in receivedData.split("}"):
-					if data != "":
-						data += "}"
+					for data in receivedData.split("}"):
+						if data != "":
+							data += "}"
 
-						# If we have received a read-message return the log as a string
-						if data[0:4] == "READ":
-							result = acceptor.receiveRead()
-							s.send(result)
-
-
-						# Else if we have received a end-message, end this connection
-						elif data[0:3] == "END":
-							s.send('GOODBYE')
-							connections.remove(s)
-							s.close()
-							print 'Removed'
-							break
+							# Else if we have received a propose-message, forward it to an acceptor 
+							# that in turn replies with with eighter its reply if accepted, else returns
+							# an empty string(?)
+							if data[0:8] == "PROPOSE:":
+								result = data[8:]
+								proposed = json.loads(result)
+								reply = acceptor.receivePropose(proposed)
+								s.send("ACK:"+json.dumps(reply))
 
 
-						# Else if we have received a post-message, start paxos
-						elif data[0:5] == "POST:":
-							result = data[5:]
-							if paxosRunning:
-								posts.append(result)
-							else:
-								proposemessage = json.dumps(proposer.prepare(result))
-								broadcast("PROPOSE:"+proposemessage)
-							#s.send("Received: "+result) # remove
+							# Else if we have received an ACK-message, an acceptor has accepted our proposal,
+							# forwards this to the proposer, which in turn broadcasts an accept-message if
+							# it has the majority of the acceptors accept its proposal
+							elif data[0:4] == "ACK:":
+								result = data[4:]
+								result = json.loads(result)
+								reply = proposer.receivePromise(result)
+								if reply == "RESTART":
+									# In this case, propose your own value again, before others in queue
+									proposemessage = json.dumps(proposer.prepare(proposer.myValue))
+									broadcast("PROPOSE:"+proposemessage)
+								# When majority is received, check if conflict has occured (previous proposal accepted,
+								# but not decided), if so, insert post first in queue.
+								elif reply != None:
+									if reply['conflict'] != None:
+										post = reply['conflict']
+										posts.insert(0, post)
+										# Conflict occured, add post to begining of posts, continue as normal
+									del reply['conflict']
+									reply = json.dumps(reply)
+									broadcast("ACCEPT:"+reply)
 
 
-						# Else if we have received a propose-message, forward it to an acceptor 
-						# that in turn replies with with eighter its reply if accepted, else returns
-						# an empty string(?)
-						elif data[0:8] == "PROPOSE:":
-							result = data[8:]
-							proposed = json.loads(result)
-							reply = acceptor.receivePropose(proposed)
-							s.send("ACK:"+json.dumps(reply))
+							# Else if we have received an accept-message, forward this to the acceptor
+							# which in turn responds an accepted-message if it accepted the value
+							elif data[0:7] == "ACCEPT:":
+								result = data[7:]
+								result = json.loads(result)
+								reply = acceptor.receiveAccept(result)
+								s.send("ACCEPTED:"+json.dumps(reply))  # Does not broadcast
 
 
-						# Else if we have received an ACK-message, an acceptor has accepted our proposal,
-						# forwards this to the proposer, which in turn broadcasts an accept-message if
-						# it has the majority of the acceptors accept its proposal
-						elif data[0:4] == "ACK:":
-							result = data[4:]
-							result = json.loads(result)
-							reply = proposer.receivePromise(result)
-							if reply == "RESTART":
-								# In this case, propose your own value again, before others in queue
-								proposemessage = json.dumps(proposer.prepare(proposer.myValue))
-								broadcast("PROPOSE:"+proposemessage)
-							# When majority is received, check if conflict has occured (previous proposal accepted,
-							# but not decided), if so, insert post first in queue.
-							elif reply != None:
-								if reply['conflict'] != None:
-									post = reply['conflict']
-									posts.insert(0, post)
-									# Conflict occured, add post to begining of posts, continue as normal
-								del reply['conflict']
-								reply = json.dumps(reply)
-								broadcast("ACCEPT:"+reply)
-
-
-						# Else if we have received an accept-message, forward this to the acceptor
-						# which in turn responds an accepted-message if it accepted the value
-						elif data[0:7] == "ACCEPT:":
-							result = data[7:]
-							result = json.loads(result)
-							reply = acceptor.receiveAccept(result)
-							s.send("ACCEPTED:"+json.dumps(reply))  # Does not broadcast
-
-
-						# Else if we have received an accepted-message, forward this to the proposer
-						# which in turn broadcasts the decided value if all acceprors have accepted 
-						# the value
-						elif data[0:9] == "ACCEPTED:":
-							result = data[9:]
-							result = json.loads(result)
-							reply = proposer.receiveAccepted(result)
-							if reply == "RESTART":
-								proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
-								broadcast("PROPOSE:"+proposemessage)
-
-							# Reply is None until majority is reached, reply is the value as a string
-							elif reply != None:
-								broadcast("DECIDE:"+{'value': reply})  #reply is a string
-
-								if not posts:
-									paxosRunning = False
-								else:
-									post = posts.pop(0)
-									proposemessage = json.dumps(proposer.prepare(post)) # This makes sense
+							# Else if we have received an accepted-message, forward this to the proposer
+							# which in turn broadcasts the decided value if all acceprors have accepted 
+							# the value
+							elif data[0:9] == "ACCEPTED:":
+								result = data[9:]
+								result = json.loads(result)
+								reply = proposer.receiveAccepted(result)
+								if reply == "RESTART":
+									proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
 									broadcast("PROPOSE:"+proposemessage)
 
+								# Reply is None until majority is reached, reply is the value as a string
+								elif reply != None:
+									broadcast("DECIDE:"+{'value': reply})  #reply is a string
+
+									if not posts:
+										paxosRunning = False
+									else:
+										post = posts.pop(0)
+										proposemessage = json.dumps(proposer.prepare(post)) # This makes sense
+										broadcast("PROPOSE:"+proposemessage)
 
 
-						# Else if we have received a decide-message, a value has been decided, forward
-						# to acceptor which stores the value in the log
-						elif data[0:7] == "DECIDE:":
-							result = data[7:] #result is a string
-							post = json.loads(result)
-							acceptor.receiveDecide(post)
+
+							# Else if we have received a decide-message, a value has been decided, forward
+							# to acceptor which stores the value in the log
+							elif data[0:7] == "DECIDE:":
+								result = data[7:] #result is a string
+								post = json.loads(result)
+								acceptor.receiveDecide(post)
+
+							else:
+								try:
+									s.send('PING')
+								except:
+									print "Could not send PING"
+									if s in connections:
+										s.close()
+										connections.remove(s)
+
+				else:
+					# If we have received a read-message return the log as a string
+					if data[0:4] == "READ":
+						result = acceptor.receiveRead()
+						s.send(result)
 
 
-						# Else if we have received a shutdown-message, end the connection and end the process
-						elif data[0:8] == "SHUTDOWN":
-							print 'Shutting Down'
-							#server.shutdown(2)
-							shutdown()
+					# Else if we have received a end-message, end this connection
+					elif data[0:3] == "END":
+						s.send('GOODBYE')
+						connections.remove(s)
+						s.close()
+						print 'Removed'
+						break
 
 
-						elif data[0:10] == 'GOINGDOWN:':
-							ip = data[10:]
-							if s in connections:
-								s.close()
-								connections.remove(s)
-								print ip, "went down"
-
-
-						# Else return an invalid-message
-						elif data != "":
-							s.send('INVALID')
-
-
+					# Else if we have received a post-message, start paxos
+					elif data[0:5] == "POST:":
+						result = data[5:]
+						if paxosRunning:
+							posts.append(result)
 						else:
-							try:
-								s.send('PING')
-							except:
-								print "Could not send PING"
-								if s in connections:
-									s.close()
-									connections.remove(s)
+							proposemessage = json.dumps(proposer.prepare(result))
+							broadcast("PROPOSE:"+proposemessage)
+						#s.send("Received: "+result) # remove
+
+					# Else if we have received a shutdown-message, end the connection and end the process
+					elif data[0:8] == "SHUTDOWN":
+						print 'Shutting Down'
+						#server.shutdown(2)
+						shutdown()
+
+
+					elif data[0:10] == 'GOINGDOWN:':
+						ip = data[10:]
+						if s in connections:
+							s.close()
+							connections.remove(s)
+							print ip, "went down"
+
+
+					# Else return an invalid-message
+					elif data != "":
+						s.send('INVALID')
+
 
 				break
