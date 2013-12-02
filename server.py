@@ -61,6 +61,7 @@ while 1:
 		if s == server:
 			connection, address = server.accept()
 			connections.append(connection)
+			connection.send("CATCHUP:"+acceptor.receiveRead())
 			print 'Client connected:', address
 
 		# Else if there is received data
@@ -197,6 +198,10 @@ while 1:
 							connections.remove(s)
 							print ip, "went down"
 
+
+					elif receivedData[0:8] == 'CATCHUP:':
+						log = receivedData[8:]
+						acceptor.saveLogString(log)
 
 					# Else return an invalid-message
 					elif receivedData != "":

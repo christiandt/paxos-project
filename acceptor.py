@@ -26,6 +26,10 @@ def saveLog(log):
         return False
 
 
+def saveLogString(log):
+    saveLog(log.split(':'))
+
+
 def receiveRead():
     logString = ""
     for post in getLog():
