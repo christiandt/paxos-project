@@ -184,7 +184,7 @@ while 1:
 
 					# Else if we have received a post-message, start paxos
 					elif receivedData[0:5] == "POST:":
-						result = data[5:]
+						result = receivedData[5:]
 						if paxosRunning:
 							posts.append(result)
 						else:
@@ -200,7 +200,7 @@ while 1:
 
 
 					elif receivedData[0:10] == 'GOINGDOWN:':
-						ip = data[10:]
+						ip = receivedData[10:]
 						if s in connections:
 							s.close()
 							connections.remove(s)
