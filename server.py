@@ -168,13 +168,13 @@ while 1:
 
 				else:
 					# If we have received a read-message return the log as a string
-					if data[0:4] == "READ":
+					if receivedData[0:4] == "READ":
 						result = acceptor.receiveRead()
 						s.send(result)
 
 
 					# Else if we have received a end-message, end this connection
-					elif data[0:3] == "END":
+					elif receivedData[0:3] == "END":
 						s.send('GOODBYE')
 						connections.remove(s)
 						s.close()
@@ -183,7 +183,7 @@ while 1:
 
 
 					# Else if we have received a post-message, start paxos
-					elif data[0:5] == "POST:":
+					elif receivedData[0:5] == "POST:":
 						result = data[5:]
 						if paxosRunning:
 							posts.append(result)
@@ -193,13 +193,13 @@ while 1:
 						#s.send("Received: "+result) # remove
 
 					# Else if we have received a shutdown-message, end the connection and end the process
-					elif data[0:8] == "SHUTDOWN":
+					elif receivedData[0:8] == "SHUTDOWN":
 						print 'Shutting Down'
 						#server.shutdown(2)
 						shutdown()
 
 
-					elif data[0:10] == 'GOINGDOWN:':
+					elif receivedData[0:10] == 'GOINGDOWN:':
 						ip = data[10:]
 						if s in connections:
 							s.close()
@@ -208,7 +208,7 @@ while 1:
 
 
 					# Else return an invalid-message
-					elif data != "":
+					elif receivedData != "":
 						s.send('INVALID')
 
 
