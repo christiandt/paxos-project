@@ -15,6 +15,13 @@ def prepare(post):
 	global myValue
 	global proposalID
 	global maxProposalID
+	global notAcceptedPromise
+	global acceptedPromise
+	global acceptedAccepted
+	notAcceptedPromise = []
+	acceptedPromise = []
+	acceptedAccepted = []
+
 	myValue = post 		# Set the local value to the received post-message
 	
 	if maxProposalID != None:
