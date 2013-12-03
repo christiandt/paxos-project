@@ -1,4 +1,3 @@
-# coding=utf-8
 import math, acceptor 
 
 serverID = 3			# server ID
@@ -26,7 +25,7 @@ def prepare(post):
 	
 	if maxProposalID != None:
 	    maxProposalID += 10
-	    proposalID = int(math.floor(maxProposalID/10) * 10 + serverID)	# changed back
+	    proposalID = int(math.floor(maxProposalID/10) * 10 + serverID)
 	else:
 		proposalID+=10
 
@@ -39,7 +38,8 @@ def receivePromise(accepted):
 	global acceptedPromise
 	global notAcceptedPromise
 
-	if accepted['senderPropID'] != proposalID: return 		# Throw away old ACK/NACK
+	# Throw away old ACK/NACK
+	if accepted['senderPropID'] != proposalID: return
 
 	# If we receive older proposal or a NACK, it shoud not count in the majority
 	if accepted['type'] == "ACK": 
@@ -57,7 +57,7 @@ def receivePromise(accepted):
 	elif len(acceptedPromise) >= majority:
 		
 		# Find the maximum proposal id of all the accepted promises returned from the acceptors
-		maxProposalID = max(promise['proposalID'] for promise in acceptedPromise)	# Will this one handle "None"?
+		maxProposalID = max(promise['proposalID'] for promise in acceptedPromise)
 		for promise in acceptedPromise:
 			if maxProposalID != None:
 				# If not all proposal IDs are None, set myValue to the value of the proposal 

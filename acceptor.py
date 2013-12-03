@@ -1,5 +1,3 @@
-# coding=utf-8
-
 import cPickle as pickle
 
 minProposal = 0
@@ -50,7 +48,7 @@ def receivePropose(proposed):
     # If the received ID is lower than what has allready been proposed, reply back to proposer
     # with the last accepted value
     else:
-        return {'senderID': None, 'proposalID' : None, 'value' : None, 'type': "NACK", 'senderPropID': proposed['proposalID']}          # CHANGED
+        return {'senderID': None, 'proposalID' : None, 'value' : None, 'type': "NACK", 'senderPropID': proposed['proposalID']}
 
 
 def receiveAccept(accept):
