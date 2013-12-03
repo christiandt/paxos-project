@@ -2,8 +2,7 @@ import socket, select, sys, json
 import proposer, acceptor
 
 
-# TCP_IP = socket.gethostbyname(socket.gethostname()) # This will not work on Amazon.
-TCP_IP = ""
+TCP_IP = socket.gethostbyname(socket.gethostname())
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 debug = True
