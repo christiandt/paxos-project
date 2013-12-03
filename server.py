@@ -2,7 +2,8 @@ import socket, select, sys, json
 import proposer, acceptor
 
 
-TCP_IP = socket.gethostbyname(socket.gethostname())
+# TCP_IP = socket.gethostbyname(socket.gethostname()) # This will not work on Amazon.
+TCP_IP = ""
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 debug = True
@@ -17,7 +18,7 @@ connections.append(server)
 print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
-ips = ["10.185.35.34", "10.147.130.226", "10.178.43.181", "10.202.138.82", "10.252.60.86"]
+ips = ["184.73.143.243", "23.23.24.13", "54.211.230.47", "54.215.33.217", "54.202.214.31"]
 for ip in ips:
 	if ip != TCP_IP:
 		try:

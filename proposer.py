@@ -6,7 +6,7 @@ proposalID = serverID	# ProposalID increments 10 with each prepare. Last digit i
 acceptedPromise = []
 acceptedAccepted = []
 notAcceptedPromise = []
-majority = 2
+majority = 3
 maxProposalID = 0
 
 
