@@ -12,13 +12,13 @@ posts = []
 paxosRunning = False
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((TCP_IP, TCP_PORT))
+server.bind((PRIVATE_TCP_IP, TCP_PORT))
 server.listen(5)
 connections.append(server)
 print "Server started"
-print "Address", TCP_IP, ":", TCP_PORT
+print "Address", PRIVATE_TCP_IP, ":", TCP_PORT
 
-ips = ["184.73.143.243", "23.23.24.13", "54.211.230.47", "54.215.33.217", "54.202.214.31"]
+ips = ["54.227.213.62", "54.219.24.28"]
 for ip in ips:
 	if ip != PUBLIC_TCP_IP:
 		try:
@@ -44,7 +44,7 @@ def broadcast(message):
 def shutdown():
 	for socket in connections:
 		if socket != server:
-			socket.send('GOINGDOWN:'+TCP_IP)
+			socket.send('GOINGDOWN:'+PUBLIC_TCP_IP)
 			socket.close()
 	server.close()
 	print 'Goodbye'
