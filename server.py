@@ -18,8 +18,7 @@ connections.append(server)
 print "Server started"
 print "Address", TCP_IP, ":", TCP_PORT
 
-# add try-except to connects. Need to handle servers that are not turned on
-ips = ["10.0.0.13", "10.0.0.14", "10.0.0.15", "10.0.0.100"]
+ips = ["184.73.143.243", "23.23.24.13", "54.211.230.47", "54.215.33.217", "54.202.214.31"]
 for ip in ips:
 	if ip != PUBLIC_TCP_IP:
 		try:
@@ -87,8 +86,6 @@ while 1:
 							data += "}"
 
 							# Else if we have received a propose-message, forward it to an acceptor 
-							# that in turn replies with with eighter its reply if accepted, else returns
-							# an empty string(?)
 							if data[0:8] == "PROPOSE:":
 								result = data[8:]
 								proposed = json.loads(result)
@@ -125,7 +122,7 @@ while 1:
 								result = data[7:]
 								result = json.loads(result)
 								reply = acceptor.receiveAccept(result)
-								s.send("ACCEPTED:"+json.dumps(reply))  # Does not broadcast
+								s.send("ACCEPTED:"+json.dumps(reply))
 
 
 							# Else if we have received an accepted-message, forward this to the proposer
@@ -136,7 +133,7 @@ while 1:
 								result = json.loads(result)
 								reply = proposer.receiveAccepted(result)
 								if reply == "RESTART":
-									proposemessage = json.dumps(proposer.prepare(proposer.myValue)) # This makes sense?
+									proposemessage = json.dumps(proposer.prepare(proposer.myValue))
 									broadcast("PROPOSE:"+proposemessage)
 
 								# Reply is None until majority is reached, reply is the value as a string
@@ -147,7 +144,7 @@ while 1:
 										paxosRunning = False
 									else:
 										post = posts.pop(0)
-										proposemessage = json.dumps(proposer.prepare(post)) # This makes sense
+										proposemessage = json.dumps(proposer.prepare(post))
 										broadcast("PROPOSE:"+proposemessage)
 
 
@@ -183,12 +180,10 @@ while 1:
 						else:
 							proposemessage = json.dumps(proposer.prepare(result))
 							broadcast("PROPOSE:"+proposemessage)
-						#s.send("Received: "+result) # remove
 
 					# Else if we have received a shutdown-message, end the connection and end the process
 					elif receivedData[0:8] == "SHUTDOWN":
 						print 'Shutting Down'
-						#server.shutdown(2)
 						shutdown()
 
 
