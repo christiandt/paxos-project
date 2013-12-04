@@ -18,7 +18,7 @@ connections.append(server)
 print "Server started"
 print "Address", PRIVATE_TCP_IP, ":", TCP_PORT
 
-ips = ["54.227.213.62", "54.219.24.28"]
+ips = ["54.227.213.62", "54.228.167.146", "54.251.21.74", "54.219.24.28", "54.245.6.16"]
 for ip in ips:
 	if ip != PUBLIC_TCP_IP:
 		try:
