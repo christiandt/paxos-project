@@ -2,7 +2,8 @@ import socket, select, sys, json
 import proposer, acceptor
 
 
-TCP_IP = socket.gethostbyname(socket.gethostname())
+PRIVATE_TCP_IP = socket.gethostbyname(socket.gethostname())
+PUBLIC_TCP_IP = ""
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 debug = True
@@ -20,7 +21,7 @@ print "Address", TCP_IP, ":", TCP_PORT
 # add try-except to connects. Need to handle servers that are not turned on
 ips = ["10.0.0.13", "10.0.0.14", "10.0.0.15", "10.0.0.100"]
 for ip in ips:
-	if ip != TCP_IP:
+	if ip != PUBLIC_TCP_IP:
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			s.connect((ip, TCP_PORT))
