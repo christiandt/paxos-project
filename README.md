@@ -26,11 +26,11 @@ Send GOINGDOWN-message, close all connections and end program. This stops the se
 ###GOINGDOWN: 
 Lets other servers know that a server was shut down. Removes the connection to this server
 
-###CATCHUP: 
+####CATCHUP: 
 When connecting to a system with already running servers, the CATCHUP-message contains the whole log so that you can catch up with the rest.
 
 Supported JSON input:
-##PROPOSE: 
+####PROPOSE: 
 A PROPOSE-message contains the proposal sent to all acceptors. The proposal data consists of the sender ID, and the proposal ID. When a PROPOSE-message is received, it is sent to acceptor.receivePropose(). The result is then sent back to the proposer as an ACK-message.
 
 ###ACK: 
