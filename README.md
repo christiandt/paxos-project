@@ -7,6 +7,8 @@ paxos-project
 In this project we have implemented a micro-blogging (Mblog) application 
 that is fully replicated to many sites, using the <a href="http://en.wikipedia.org/wiki/Paxos_(computer_science)">Paxos protocol</a>. Our implementation of Paxos consists of 5 parts: Server, Proposer, Acceptor, Tests and Client. 
 
+The project has been successfully run on amazon ec2 instances in 5 different locations around the globe.
+
 ##Server
 The server handles all of the communication in paxos. It interprets the received message, and forwards data to the correct function in either the proposer or acceptor. The received data starts with a keyword followed by the actual data in either JSON format from other servers, or just plain text.
 
